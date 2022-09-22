@@ -35,7 +35,6 @@ This repo is part of Udacity Data Scientists Nanodegree Program. I picked Stacko
 3. Which occupations were most popular in Latam?
 4. Which Latam location has the highest career satisfaction?
 5. Which Latam location has the highest salary?
-6. Which Location has the highest salary growth?
 
 ## File Descriptions <a name="files"></a>
 
@@ -49,7 +48,7 @@ README.md - The file with the content you are reading now ;).
 The rows are the respondants to the survey, and the columns are the answer to the survey questions and is our variables. It contains data have a numerical, categorical and text types. Missing values and outliers are present in the variables.
 
 ### I. Summary
-The following results are a brief summary for the 6 questions over the data exploration contained in the project:
+The following results are a brief summary for the 5 questions over the data exploration contained in the project:
 - Brazil is the country with most presence in Latam.
 - Javascript and Java are the most want language to work.
 - Webdeveloper was the most occupation in 2017 on Latam.
@@ -58,13 +57,11 @@ The following results are a brief summary for the 6 questions over the data expl
 - Definely Latam doesn't reflected the Global salary growth.
 
 ### II. Acknowledgements
-The main findings of the code can be found at the post available [here](https://medium.com/dennisXXXXXXX)
+The main findings of the code can be found at the post available [here](https://medium.com/@dennis.eduardo/what-is-the-best-country-for-a-developer-to-work-in-latam-92d4328872f7)
 
 ## Licensing, Authors, Acknowledgements<a name="licensing"></a>
 
 You can find the Licensing for the data and other descriptive information at the Stackoverflow link available [here](https://insights.stackoverflow.com/survey).
 
 ## MY Medium Blog Post
-Here is the Medium blog post: https://medium.com/@dennisXXXXXXX/xblablablau)
-
-Title == What is the best country for developers to work in Latin America (Latam)?
+Here is the Medium blog post: https://medium.com/@dennis.eduardo/what-is-the-best-country-for-a-developer-to-work-in-latam-92d4328872f7
