@@ -2,21 +2,24 @@ import sys
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
+import matplotlib.pyplot as plt
 
 messages_dataset_file = './data/disaster_messages.csv'
 categories_dataset_file = './data/disaster_categories.csv'
 database_name = 'DisasterResponseData.db'
 
 def load_data(messages_filepath, categories_filepath):
-    """Load and merge messages and categories data, prepare target data for multi-output classifier
+    '''
+    load_data
+    Load data from csv files and merge to a single pandas dataframe
     
-    Arguments:
-        messages_filepath {str} -- CSV filepath of messages data.
-        categories_filepath {str} -- CSV filepath of categories data.
+    Inputs:
+    messages_filepath    filepath to messages csv file
+    categories_filepath  filepath to categories csv file
     
     Returns:
-        Dataframe -- Pandas Dataframe of merged data
-    """
+    df      dataframe merging categories and messages
+    '''
 
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -25,7 +28,7 @@ def load_data(messages_filepath, categories_filepath):
 
     categories = df.categories.str.split(pat = ';', expand = True)
     row = categories.iloc[0,:]
-    category_colnames = row.apply(lambda x:x[:-2])
+    category_colnames = row.apply(lambda x:x[:-2]).to_list()
     categories.columns = category_colnames
 
     for column in categories:
@@ -40,15 +43,17 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
-    """Feature Data cleaning.
-    1. Drop duplicates and unnecessary data
+    '''
+    clean_data
+    Data cleaning to drop duplicates and unnecessary data
     
-    Arguments:
-        df {Dateframe} -- Pandas Dataframe
+    Inputs
+    df      pandas dataframe with merge categories and messages
     
     Returns:
-        df -- Pandas Dataframe processed
-    """
+    df      dataframe cleaned data
+    '''
+
     # drop duplicates
     df = df.drop_duplicates()
 
@@ -56,14 +61,44 @@ def clean_data(df):
     
 
 def save_data(df, database_filename):
-    """Save processed data to a SQLite file
+    '''
+    save_data
+    Save processed data to a SQLite file
     
-    Arguments:
-        df {Dataframe} -- Pandas Dataframe
-        database_filename {str} -- storaged dataframe filename
-    """
-    engine = create_engine('sqlite:///./data/' + database_filename)
+    Inputs:
+    df                 pandas dataframe
+    database_filename  filename to storaged data
+    '''
+
+    engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('DisasterResponse', engine, if_exists = 'replace', index=False)
+    return
+
+
+def dashboads_update(df):
+    '''
+    dashboads_update
+    Generate and save graphs to web app page
+    
+    Inputs:
+    df                 pandas dataframe
+    '''
+
+    dfg = df.groupby('genre')['message'].count().reset_index(name='qty')
+    fig, ax = plt.subplots(figsize=(17,11), dpi=300)
+    ax.bar(dfg.genre, dfg.qty, color='green')
+    ax.set_xlabel('\n Genre', fontsize=16)
+    ax.set_title('Distribution of Messages Genre \n', fontsize=23)
+    plt.savefig('../dash1.jpg', format='jpg', dpi=300)
+
+    dfg2 = df.sum().drop(['id','message','genre']).sort_values(ascending=False)[:9].reset_index()
+    dfg2.columns = ['response','qty']
+    fig, ax = plt.subplots(figsize=(17,11), dpi=300)
+    ax.bar(dfg2.response, dfg2.qty, color='green')
+    ax.set_xlabel('\n Response', fontsize=16)
+    ax.set_title('Top 10 response \n', fontsize=23)
+    plt.savefig('dash2.jpg', format='jpg', dpi=300)
+    return
 
 
 def main():
@@ -80,6 +115,9 @@ def main():
         
         print('Saving data...\n    DATABASE: {}'.format(database_filename))
         save_data(df, database_filename)
+        
+        print('Update Dashboards!')
+        dashboads_update(df)
         
         print('Cleaned data saved to database!')
     
